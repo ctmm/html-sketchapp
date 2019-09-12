@@ -1,20 +1,11 @@
-const sketch = require('sketch/dom');
+const alignArtboards = document => {
+  document.pages().forEach(nativePage => {
 
-const alignArtboards = (document, lastIndex) => {
-  document.pages().forEach((nativePage, i) => {
-    if (i < lastIndex) {
-      return;
-    }
-    const page = sketch.fromNative(nativePage);
+    nativePage.layers().forEach((artboard, i) => {
+      const x = nativePage.layers().slice(0, i).reduce((a, v) => a + v.frame().width() + 100, 0);
 
-    page.layers.forEach((layer, i) => {
-      const x = page.layers.slice(0, i).reduce((a, v) => a + v.frame.width + 100, 0);
-
-      layer.frame = {
-        ...layer.frame,
-        y: 0,
-        x
-      };
+      artboard.frame().x = x;
+      artboard.frame().y = 0;
     });
   });
 };

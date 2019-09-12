@@ -149,9 +149,6 @@ function parseDocument(document, asketchDocument) {
 export default function asketch2sketch(context, asketchFiles) {
   const document = context.document;
 
-  // remove "Page 1"
-  // document.removePage(document.pages()[0]);
-
   // delete all pages
   for (let i = document.pages().length - 1; i > 0; i--) {
     document.removePage(document.pages()[i]);
@@ -164,4 +161,7 @@ export default function asketch2sketch(context, asketchFiles) {
       parseDocument(document, asketchFile) :
       parsePage(document, asketchFile)
   ));
+
+  // remove "Page 1" or leftover from other document.
+  document.removePage(document.pages()[0]);
 }

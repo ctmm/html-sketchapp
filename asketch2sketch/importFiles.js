@@ -39,5 +39,5 @@ export default function importFiles(context) {
   asketch2sketch(context, asketchFiles);
 
   manageSymbols(context);
-  // cleanupFile(context, lastIndex);
+  cleanupFile(context);
 }
