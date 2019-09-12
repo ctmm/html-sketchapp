@@ -153,11 +153,11 @@ export default function asketch2sketch(context, asketchFiles) {
   // document.removePage(document.pages()[0]);
 
   // delete all pages
-  // for (let i = document.pages().length - 1; i > 0; i--) {
-  //   document.removePage(document.pages()[i]);
-  // }
+  for (let i = document.pages().length - 1; i > 0; i--) {
+    document.removePage(document.pages()[i]);
+  }
 
-  // document.pages().forEach(id => document.removePage(id));
+  document.pages().forEach(id => document.removePage(id));
 
   asketchFiles.forEach(asketchFile => (
     asketchFile._class === 'document' ?

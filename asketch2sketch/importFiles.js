@@ -38,8 +38,6 @@ export default function importFiles(context) {
 
   asketch2sketch(context, asketchFiles);
 
-  const lastIndex = context.document.pages().length - 1;
-
-  manageSymbols(context, lastIndex);
-  cleanupFile(context, lastIndex);
+  manageSymbols(context);
+  // cleanupFile(context, lastIndex);
 }

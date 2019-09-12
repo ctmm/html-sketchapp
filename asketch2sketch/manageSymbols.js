@@ -1,35 +1,38 @@
 const sketch = require('sketch/dom');
 
-const organizeSymbolMasters = (document, lastIndex) => {
-  document.pages().forEach((nativePage, i) => {
-    if (i < lastIndex) {
+const organizeSymbolMasters = document => {
+  document.pages().forEach(nativePage => {
+    const symbolMasters = nativePage.symbols();
+
+    if (symbolMasters.length <= 0) {
       return;
     }
-    const nativeSymbolsPage = sketch.Page.createSymbolsPage();
 
-    nativeSymbolsPage.parent = document;
+    const symbolsPage = sketch.Page.createSymbolsPage();
 
-    const symbolsPage = sketch.fromNative(nativeSymbolsPage);
-    const page = sketch.fromNative(nativePage);
-
-    nativeSymbolsPage.name = `${nativeSymbolsPage.name} ${page.name}`;
+    symbolsPage.name = `${symbolsPage.name} ${nativePage.name()}`;
 
     const unusableTrash = [];
 
-    page.layers.forEach(layer => {
-      const {type, frame, layers} = layer;
+    symbolMasters.forEach(symbolMaster => {
+      const isTrash = symbolMaster.frame().height() <= 0 ||
+      symbolMaster.frame().width() <= 0 ||
+      symbolMaster.layers().length <= 0;
 
-      if (frame.height <= 0 || frame.width <= 0 || layers.length <= 0) {
-        unusableTrash.push(layer.id);
-        return;
-      }
-
-      if (type === 'SymbolMaster') {
-        symbolsPage.layers = [...symbolsPage.layers, layer];
-      }
+      return isTrash ?
+        unusableTrash.push(symbolMaster.symbolID()) :
+        symbolsPage.layers.push(symbolMaster);
     });
 
-    page.layers = [...page.layers.filter(layer => unusableTrash.indexOf(layer.id) < 0)];
+    nativePage.layers = nativePage.layers()
+      .slice()
+      .filter(layer => (layer.symbolID ? unusableTrash.indexOf(layer.symbolID()) < 0 : true));
+
+    if (symbolsPage.layers.length <= 0) {
+      return;
+    }
+
+    symbolsPage.parent = document;
   });
 };
 
