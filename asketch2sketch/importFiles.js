@@ -1,4 +1,6 @@
 import asketch2sketch from './asketch2sketch';
+import manageSymbols from './manageSymbols';
+import cleanupFile from './cleanupFile';
 
 export default function importFiles(context) {
   const panel = NSOpenPanel.openPanel();
@@ -35,4 +37,7 @@ export default function importFiles(context) {
   });
 
   asketch2sketch(context, asketchFiles);
+
+  manageSymbols(context);
+  cleanupFile(context);
 }
